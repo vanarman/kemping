@@ -10,7 +10,7 @@
 .width70 {width: 70%;}
 
 @media all and (max-width:1199px) {
-	#wrapper, #wrapper-content {
+	#wrapper {
 	   width: 1000px !important;
 	}
 	div#main {
@@ -22,6 +22,27 @@
 
    .spacer-buy-area .price-area {
       margin: 0 40px 0 0 !important;
+   }
+
+   #wrapper-content {
+      display: table;
+      margin-left: 40px;
+      width: 960px !important;
+   }
+
+   div.logo-image {
+      width: 925px !important;
+      margin-left: 70px !important;
+   }
+
+   footer .custom {
+      width: 880px;
+      display: table;
+      margin: 0 auto;
+   }
+
+   footer #menu {
+      padding-left: 5% !important;
    }
 }
 /*@media all and (min-width: 1200px)*/
@@ -919,6 +940,16 @@ footer.row.span12 {
    color: rgb(255,255,255);
    font-size: 12px;
    line-height: 14px;
+}
+
+footer .custom {
+   width: 91%;
+   margin: 0 auto;
+   display: table;
+}
+
+footer #menu {
+   padding-left: 5%;
 }
 
 /* Stati page */

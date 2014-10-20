@@ -145,8 +145,8 @@ aside#left > ul li{
 }
 
 aside#left > ul li:hover div a{
-   color: rgb(255, 255, 255);
-   text-decoration: none;
+   /*color: rgb(255, 255, 255);*/
+   /*text-decoration: none;*/
 }
 
 aside#left ul.menu li ul {
@@ -155,7 +155,7 @@ aside#left ul.menu li ul {
 
 aside#left > ul.menu li:hover {
    position: relative;
-   background-color: rgba(143, 188, 143, 0.8);
+   /*background-color: rgba(143, 188, 143, 0.8);*/
 }
 
 aside#left ul.menu li:hover > ul {
@@ -169,13 +169,6 @@ aside#left ul.menu li:hover > ul li{
 
 aside#left ul.menu li:hover > ul li a {
    color: rgb(0, 136, 204);
-}
-
-aside#left ul.menu li:hover > ul li:hover a {
-   color: rgb(255, 255, 255);
-}
-aside#left > ul.menu li:hover > ul li:hover {
-   background-color: rgba(143, 188, 143, 1);
 }
 
 aside#left ul.menu li:hover > ul {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <extension version="2.5" type="template">
+         <name>kemping</name>
+         <creationDate>2014-10-07</creationDate>
+         <author>VanArman</author>
+         <authorEmail>dimaarman@gmail.com</authorEmail>
+         <copyright>VanArman 2014</copyright>
+         <license>GNU/GPL 2 or Later</license>
+         <version>1.0.0</version>
+         <description>
+                This template was programed by Dmytro Sytnik (VanArman).
+         </description>
+         <files>
+ 		 <folder>css</folder>
+                 <folder>images</folder>
+                 <folder>html</folder>
+                 <folder>js</folder>
+                 <folder>language</folder>
+                 <filename>index.php</filename>
+                 <filename>templateDetails.xml</filename>
+                 <filename>template_preview.png</filename>
+                 <filename>template_thumbnail.png</filename>
+         </files>
+         <positions>
+                 <position>logo</position>
+                 <position>mainmenu</position>
+                 <position>breadcrumbs</position>
+                 <position>right</position>
+                 <position>left</position>
+                 <position>main</position>
+                 <position>footer</position>
+                 <position>search</position>
+                 <position>topbaner</position>
+         </positions>
+ </extension>

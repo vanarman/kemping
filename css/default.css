@@ -19,6 +19,10 @@
 	#menu{
 	   padding-left: 0 !important;
 	}
+
+   .spacer-buy-area .price-area {
+      margin: 0 40px 0 0 !important;
+   }
 }
 /*@media all and (min-width: 1200px)*/
 body {
@@ -73,12 +77,9 @@ header {
 }
 
 div#search {
-   /*position: absolute;
-   top: -15px;
-   right: 3%;*/
-   margin: -15px 0;
+   margin: 5px 0;
    padding: 0;
-   height: 30px;
+   height: 20px;
 }
 
 /*div#search:before{
@@ -409,7 +410,7 @@ div.vm-pagination ul li {
 }
 /* Price in category */
 .product-price {
-   margin: 5px 0;
+   margin: 0px 0px 10px 15px;
 }
 
 .costumFildTitle {
@@ -459,18 +460,19 @@ div.vm-pagination ul li {
    background-color: rgb(50, 154, 28);
    border-color: rgb(50, 154, 28);
    color: rgb(255, 255, 255);
-   /*border-color: rgb(50, 154, 28);
-   background: #e8e8e8 url(../images/backgrounds.png) top repeat-x;
-   background-position: 0 -160px;*/
    position: relative;
    display: table;
    text-shadow: none;
    box-shadow: none;
 }
 
+.price-area span.PricesalesPrice.only {
+   top: 7px;
+}
+
 .price-area span.PricediscountAmount {
    border: 1px solid;
-   padding: 2px 5px 0 5px;
+   padding: 2px 6px 2px;
    font-size: 14px;
    -moz-border-top-left-radius: 12px;
    -webkit-border-top-left-radius: 12px;
@@ -485,7 +487,7 @@ div.vm-pagination ul li {
    border-color: rgb(255, 243, 19);
    background-color: rgba(255, 243, 19, 0.5);
    position: relative;
-   left: 38%;
+   left: 70px;
    top: -10px;
    transform: rotate(20deg);
    -moz-transform: rotate(20deg);
@@ -494,6 +496,23 @@ div.vm-pagination ul li {
    -o-transform: rotate(20deg);
    transform: rotate(20deg);
    display: table;
+}
+
+.price-area span.PricecostPrice {
+   border: 1px solid;
+   padding: 2px 5px;
+   font-size: 130%;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   -khtml-border-radius: 4px;
+   border-radius: 4px;
+   behavior: url(border-radius.htc);
+   color: rgb(249, 77, 14);
+   position: relative;
+   display: table;
+   text-shadow: none;
+   box-shadow: none;
+   text-decoration: line-through;
 }
 
 .price-area .addtocart-bar {
@@ -552,7 +571,7 @@ input.addtocart-button {
    text-align: center;
    letter-spacing: 1px;
    padding: 4px 5px;
-   margin: 3px 0 0 17px;
+   margin: 3px 0 0 15px;
    box-shadow: none;
    border: none;
 
@@ -581,7 +600,7 @@ span.vote {
 
 .spacer-buy-area .price-area {
    float: left;
-   margin-right: 70px;
+   margin: 0px 70px 0px 30px;
 }
 
 .spacer-buy-area {
@@ -591,8 +610,8 @@ margin-bottom: -50px;
 }
 
 .productdetails span.PricediscountAmount.productdet {
-left: 90px;
-top: -6px;
+left: 70px;
+top: -10px;
 }
 
 .product-fields {

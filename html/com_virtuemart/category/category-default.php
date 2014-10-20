@@ -95,7 +95,6 @@ if (VmConfig::get ('showCategory', 1) and empty($this->keyword)) {
 				// Do we need to close the current row now?
 				if ($iCol == $categories_per_row) {
 					?>
-					<div class="clear"></div>
 		</div>
 			<?php
 					$iCol = 1;
@@ -111,7 +110,7 @@ if (VmConfig::get ('showCategory', 1) and empty($this->keyword)) {
 		</div>
 	<?php } ?>
 	</div>
-
+<div class="clear"></div>
 	<?php
 	}
 }
@@ -222,75 +221,68 @@ if (empty($this->keyword) && !empty($this->category) && !empty($this->category->
 							<?php
 							if ($this->show_prices == '1') {
 								if ($product->prices['salesPrice']<=0 and VmConfig::get ('askprice', 1) and  !$product->images[0]->file_is_downloadable) {
-									echo "<div class = 'askprice'>" . JText::_ ('COM_VIRTUEMART_PRODUCT_ASKPRICE') . "</div>";
-								}
-								//todo add config settings
-								if ($this->showBasePrice) {
-									echo $this->currency->createPriceDiv ('basePrice', 'COM_VIRTUEMART_PRODUCT_BASEPRICE', $product->prices);
-									echo $this->currency->createPriceDiv ('basePriceVariant', 'COM_VIRTUEMART_PRODUCT_BASEPRICE_VARIANT', $product->prices);
-								}
-								echo $this->currency->createPriceDiv ('variantModification', 'COM_VIRTUEMART_PRODUCT_VARIANT_MOD', $product->prices);
-								if (round($product->prices['basePriceWithTax'],$this->currency->_priceConfig['salesPrice'][1]) != $product->prices['salesPrice']) {
-									echo '<div class="price-crossed" >' . $this->currency->createPriceDiv ('basePriceWithTax', 'COM_VIRTUEMART_PRODUCT_BASEPRICE_WITHTAX', $product->prices) . "</div>";
-								}
-								if (round($product->prices['salesPriceWithDiscount'],$this->currency->_priceConfig['salesPrice'][1]) != $product->prices['salesPrice']) {
-									echo $this->currency->createPriceDiv ('salesPriceWithDiscount', 'COM_VIRTUEMART_PRODUCT_SALESPRICE_WITH_DISCOUNT', $product->prices);
-								}
-								echo $this->currency->createPriceDiv ('salesPrice', 'COM_VIRTUEMART_PRODUCT_SALESPRICE', $product->prices);
-								if ($product->prices['discountedPriceWithoutTax'] != $product->prices['priceWithoutTax']) {
-									echo $this->currency->createPriceDiv ('discountedPriceWithoutTax', 'COM_VIRTUEMART_PRODUCT_SALESPRICE_WITHOUT_TAX', $product->prices);
+									$askquestion_url = JRoute::_('index.php?option=com_virtuemart&view=productdetails&task=askquestion&virtuemart_product_id=' . $product->virtuemart_product_id . '&virtuemart_category_id=' . $product->virtuemart_category_id, FALSE);
+									//echo $askquestion_url;
+									echo '<a class="askprice" href="'.$askquestion_url.'" title="'.JText::_ ('COM_VIRTUEMART_PRODUCT_ASKPRICE').' '.$product->product_name.'"> ' . JText::_ ('COM_VIRTUEMART_PRODUCT_ASKPRICE') . '</a>';
 								} else {
-									echo $this->currency->createPriceDiv ('priceWithoutTax', 'COM_VIRTUEMART_PRODUCT_SALESPRICE_WITHOUT_TAX', $product->prices);
-								}
-								echo $this->currency->createPriceDiv ('discountAmount', 'COM_VIRTUEMART_PRODUCT_DISCOUNT_AMOUNT', $product->prices);
-								echo $this->currency->createPriceDiv ('taxAmount', 'COM_VIRTUEMART_PRODUCT_TAX_AMOUNT', $product->prices);
-								$unitPriceDescription = JText::sprintf ('COM_VIRTUEMART_PRODUCT_UNITPRICE', $product->product_unit);
-								echo $this->currency->createPriceDiv ('unitPrice', $unitPriceDescription, $product->prices);
-							} ?>
+									if (!($product->prices['salesPrice'] == $product->prices['costPrice'] || (!isset($product->prices['costPrice'])))){
+										echo $this->currency->createPriceDiv ('costPrice', '', $product->prices['costPrice'],false,false,1.0,false,'productdet');
+										echo $this->currency->createPriceDiv ('salesPrice', '', $product->prices['salesPrice'],false,false,1.0,false,'productdet');
+										echo $this->currency->createPriceDiv ('discountAmount', '', $product->prices['discountAmount'],false,false,1.0,false,'productdet');
+									} else {
+										echo $this->currency->createPriceDiv ('salesPrice', '', $product->prices['salesPrice'],false,false,1.0,false,'only');
+									}
+								} 
+							}?>
 
 						</div>
 						<!-- Display price end -->
+
+
+
+
+						<?php
+						if (!($product->prices['salesPrice']<=0 and VmConfig::get ('askprice', 1) and  !$product->images[0]->file_is_downloadable)) { ?>
 						<!-- Add to cart start -->
 						<form method="post" class="product" action="index.php" id="addtocartproduct<?php echo $product->virtuemart_product_id ?>">
 							<div class="addtocart-bar">
-									<!-- Add costum filds start -->
-									<?php if (isset($product->customfieldsCart[0]->options)){ ?>
-									<div class="costumFildsBlock">
-										<?php
-										foreach($product->customfieldsCart[0]->options as $field) {
-											echo "<div class='costumFildTitle'>" . $product->customfieldsCart[0]->custom_title . ":</div>";
-											print_r($product->customfieldsCart[0]->display);
-										}
-										?>
-									</div>
-									<?php } ?>
-									<!-- Add costum filds end -->
-									<?php // Display the quantity box ?>
-									<!-- <label for="quantity<?php echo $this->product->virtuemart_product_id;?>" class="quantity_box"><?php echo JText::_('COM_VIRTUEMART_CART_QUANTITY'); ?>: </label> -->
-									<span class="quantity-box">
-										<input  type="text" class="quantity-input" name="quantity[]" value="1" />
-									</span>
-									<span class="quantity-controls">
-										<input type="button" class="quantity-controls quantity-plus"/>
-										<input type="button" class="quantity-controls quantity-minus" />
-									</span>
-									<?php // Display the quantity box END ?>
-
-									<?php // Add the button
-									$button_lbl = JText::_('COM_VIRTUEMART_CART_ADD_TO');
-									$button_cls = ''; //$button_cls = 'addtocart_button';
-									if (VmConfig::get('check_stock') == '1' && !$this->product->product_in_stock) {
-										$button_lbl = JText::_('COM_VIRTUEMART_CART_NOTIFY');
-										$button_cls = 'notify-button';
-									} ?>
-
-									<?php // Display the add to cart button ?>
-									<span class="addtocart-button">
-										<input type="submit" name="addtocart"  class="addtocart-button" value="<?php echo $button_lbl ?>" title="<?php echo $button_lbl ?>" />
-									</span>
-
-								<div class="clear"></div>
+								<!-- Add costum filds start -->
+								<?php if (isset($product->customfieldsCart[0]->options)){ ?>
+								<div class="costumFildsBlock">
+									<?php
+									foreach($product->customfieldsCart[0]->options as $field) {
+										echo "<div class='costumFildTitle'>" . $product->customfieldsCart[0]->custom_title . ":</div>";
+										print_r($product->customfieldsCart[0]->display);
+									}
+									?>
 								</div>
+								<?php } ?>
+								<!-- Add costum filds end -->
+								<?php // Display the quantity box ?>
+								<!-- <label for="quantity<?php echo $this->product->virtuemart_product_id;?>" class="quantity_box"><?php echo JText::_('COM_VIRTUEMART_CART_QUANTITY'); ?>: </label> -->
+								<span class="quantity-box">
+									<input  type="text" class="quantity-input" name="quantity[]" value="1" />
+								</span>
+								<span class="quantity-controls">
+									<input type="button" class="quantity-controls quantity-plus"/>
+									<input type="button" class="quantity-controls quantity-minus" />
+								</span>
+								<?php // Display the quantity box END ?>
+
+								<?php // Add the button
+								$button_lbl = JText::_('COM_VIRTUEMART_CART_ADD_TO');
+								$button_cls = ''; //$button_cls = 'addtocart_button';
+								if (VmConfig::get('check_stock') == '1' && !$this->product->product_in_stock) {
+									$button_lbl = JText::_('COM_VIRTUEMART_CART_NOTIFY');
+									$button_cls = 'notify-button';
+								} ?>
+
+								<?php // Display the add to cart button ?>
+								<span class="addtocart-button">
+									<input type="submit" name="addtocart"  class="addtocart-button" value="<?php echo $button_lbl ?>" title="<?php echo $button_lbl ?>" />
+								</span>
+								<div class="clear"></div>
+
 
 								<?php // Display the add to cart button END ?>
 								<input type="hidden" class="pname" value="<?php echo $product->product_name ?>">
@@ -301,8 +293,15 @@ if (empty($this->keyword) && !empty($this->category) && !empty($this->category->
 								<?php /** @todo Handle the manufacturer view */ ?>
 								<input type="hidden" name="virtuemart_manufacturer_id" value="<?php echo $product->virtuemart_manufacturer_id ?>" />
 								<input type="hidden" name="virtuemart_category_id[]" value="<?php echo $product->virtuemart_category_id ?>" />
+							</div>
 						</form>
 						<!-- Add to cart end -->
+						<?php } ?>
+
+
+
+
+
 					</div>
 					<?php // Product Short Description
 					if (!empty($product->product_s_desc)) {

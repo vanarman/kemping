@@ -213,7 +213,6 @@ if (empty($this->keyword) && !empty($this->category) && !empty($this->category->
 				    	<img src="<?php echo $product->images[0]->file_url; ?>" alt="Продукт <?php echo $product->product_name; ?>" />
 					</a>
 				</div>
-
 				<div class="width70 floatright">
 					<div class="price-area">
 						<!-- Display price Start -->
@@ -234,13 +233,8 @@ if (empty($this->keyword) && !empty($this->category) && !empty($this->category->
 									}
 								} 
 							}?>
-
 						</div>
 						<!-- Display price end -->
-
-
-
-
 						<?php
 						if (!($product->prices['salesPrice']<=0 and VmConfig::get ('askprice', 1) and  !$product->images[0]->file_is_downloadable)) { ?>
 						<!-- Add to cart start -->

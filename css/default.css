@@ -484,32 +484,41 @@ div.vm-pagination ul li {
    top: 7px;
 }
 
+.price-area div.PricediscountAmount:before {
+display: table;
+content: "";
+border: 11px solid transparent;
+border-right: 15px solid rgb(255, 243, 19);
+float: left;
+margin-left: -11px;
+}
+
 .price-area span.PricediscountAmount {
-   border: 1px solid;
-   padding: 2px 6px 2px;
-   font-size: 14px;
-   -moz-border-top-left-radius: 12px;
-   -webkit-border-top-left-radius: 12px;
-   -khtml-border-top-left-radius: 12px;
-   border-top-left-radius: 12px;
-   -moz-border-bottom-left-radius: 12px;
-   -webkit-border-bottom-left-radius: 12px;
-   -khtml-border-bottom-left-radius: 12px;
-   border-bottom-left-radius: 12px;
-   behavior: url(border-radius.htc);
-   border-right: 5px solid red !important;
-   border-color: rgb(255, 243, 19);
-   background-color: rgba(255, 243, 19, 0.5);
-   position: relative;
-   left: 70px;
-   top: -10px;
-   transform: rotate(20deg);
-   -moz-transform: rotate(20deg);
-   -ms-transform: rotate(20deg);
-   -webkit-transform: rotate(20deg);
-   -o-transform: rotate(20deg);
-   transform: rotate(20deg);
-   display: table;
+border: 1px solid;
+padding: 0px 7px 0px;
+font-size: 14px;
+border-right: 5px solid red !important;
+border-color: rgb(255, 243, 19);
+background-color: rgba(255, 243, 19, 0.5);
+display: table;
+position: relative;
+top: 2px;
+}
+
+.price-area div.PricediscountAmount:after {
+display: table;
+content: "";
+clear: both;
+}
+
+.price-area div.PricediscountAmount:before {
+display: table;
+content: "";
+border: 11px solid transparent;
+border-right: 9px solid rgb(255, 243, 19);
+float: left;
+position: relative;
+top: 2px;
 }
 
 .price-area span.PricecostPrice {
@@ -527,6 +536,7 @@ div.vm-pagination ul li {
    text-shadow: none;
    box-shadow: none;
    text-decoration: line-through;
+   float: left;
 }
 
 .price-area .addtocart-bar {

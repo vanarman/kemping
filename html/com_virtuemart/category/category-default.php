@@ -226,8 +226,8 @@ if (empty($this->keyword) && !empty($this->category) && !empty($this->category->
 								} else {
 									if (!($product->prices['salesPrice'] == $product->prices['costPrice'] || (!isset($product->prices['costPrice'])))){
 										echo $this->currency->createPriceDiv ('costPrice', '', $product->prices['costPrice'],false,false,1.0,false,'productdet');
-										echo $this->currency->createPriceDiv ('salesPrice', '', $product->prices['salesPrice'],false,false,1.0,false,'productdet');
 										echo $this->currency->createPriceDiv ('discountAmount', '', $product->prices['discountAmount'],false,false,1.0,false,'productdet');
+										echo $this->currency->createPriceDiv ('salesPrice', '', $product->prices['salesPrice'],false,false,1.0,false,'productdet');
 									} else {
 										echo $this->currency->createPriceDiv ('salesPrice', '', $product->prices['salesPrice'],false,false,1.0,false,'only');
 									}

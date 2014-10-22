@@ -133,6 +133,7 @@ JHTML::_ ( 'behavior.modal' );
         <p class="width3 floatleft" id="com-form-login-remember">
             <input type="submit" name="Submit" class="default login-btn" value="<?php echo JText::_('COM_VIRTUEMART_LOGIN') ?>" />
         </p>
+        
         </fieldset>
         <div class="clear"></div>
 

@@ -3,6 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="google-site-verification" content="CUK2QtHZRaJlapDP-o5sQUDCqOEsfEkuQLSwESzCGTw" />
+	<meta name='yandex-verification' content='502f4172ae86dfeb' />
 	<link rel="shortcut icon" href="images/favicon.ico"/>
 	<jdoc:include type="head" />
 	<?php
@@ -110,14 +112,6 @@
 					</div>
 					<?php endif; ?>
 					<section id="content" class="row">
-						<?php
-						if (!$user->guest) {
-							$userAroGroup = $acl->getAroGroup($user->id);
-							if ($acl->is_group_child_of($userAroGroup->name, 'Super Administrator') || $acl->is_group_child_of($userAroGroup->name, 'Administrator')) {
-							?> 					<jdoc:include type="message" /> <?php
-							}
-						}
-						?>
 						<jdoc:include type="component" />
 					</section>
 			    </div>
@@ -148,5 +142,29 @@
 <!--#######################################################################-->
 <!--End############################ Footer ################################-->
 <!--#######################################################################-->
+<!-- hit.ua -->
+<a href='http://hit.ua/?x=20620' target='_blank'>
+<script language="javascript" type="text/javascript"><!--
+Cd=document;Cr="&"+Math.random();Cp="&s=1";
+Cd.cookie="b=b";if(Cd.cookie)Cp+="&c=1";
+Cp+="&t="+(new Date()).getTimezoneOffset();
+if(self!=top)Cp+="&f=1";
+//--></script>
+<script language="javascript1.1" type="text/javascript"><!--
+if(navigator.javaEnabled())Cp+="&j=1";
+//--></script>
+<script language="javascript1.2" type="text/javascript"><!--
+if(typeof(screen)!='undefined')Cp+="&w="+screen.width+"&h="+
+screen.height+"&d="+(screen.colorDepth?screen.colorDepth:screen.pixelDepth);
+//--></script>
+<script language="javascript" type="text/javascript"><!--
+Cd.write("<img src='http://c.hit.ua/hit?i=20620&g=0&x=2"+Cp+Cr+
+"&r="+escape(Cd.referrer)+"&u="+escape(window.location.href)+
+"' border='0' wi"+"dth='1' he"+"ight='1'/>");
+//--></script>
+<noscript>
+<img src='http://c.hit.ua/hit?i=20620&amp;g=0&amp;x=2' border='0'/>
+</noscript></a>
+<!-- / hit.ua -->
 </body>
 </html>

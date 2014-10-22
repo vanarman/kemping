@@ -115,7 +115,7 @@ if(!empty($boxFuncAsk) or !empty($boxFuncReco)){
     <?php // Product Title END   ?>
 
     <div>
-		<div class="width40 floatleft">
+		<div class="width30 floatleft">
 			<?php
 			echo $this->loadTemplate('images');
 			?>
@@ -123,10 +123,7 @@ if(!empty($boxFuncAsk) or !empty($boxFuncReco)){
 				if ($this->showRating) {
 				    $maxrating = VmConfig::get('vm_maximum_rating_scale', 5);
 
-				    if (empty($this->rating)) {?>
-						<span class="vote"><?php echo JText::_('COM_VIRTUEMART_RATING') . ' ' . JText::_('COM_VIRTUEMART_UNRATED') ?></span>
-					    	<?php
-					} else {
+				    if (!empty($this->rating)) {
 					    $ratingwidth = $this->rating->rating * 24; //I don't use round as percetntage with works perfect, as for me?>
 						<span class="vote">
 							<?php echo JText::_('COM_VIRTUEMART_RATING') . ' ' . round($this->rating->rating) . '/' . $maxrating; ?><br/>
@@ -137,20 +134,10 @@ if(!empty($boxFuncAsk) or !empty($boxFuncReco)){
 						</span>
 					<?php
 				    }
-				}
-				if (is_array($this->productDisplayShipments)) {
-				    foreach ($this->productDisplayShipments as $productDisplayShipment) {
-						echo $productDisplayShipment . '<br />';
-				    }
-				}
-				if (is_array($this->productDisplayPayments)) {
-				    foreach ($this->productDisplayPayments as $productDisplayPayment) {
-						echo $productDisplayPayment . '<br />';
-				    }
 				}?>
 		</div>
 
-		<div class="width60 floatright">
+		<div class="width70 floatright">
 		    <div class="spacer-buy-area">
 
 				<?php

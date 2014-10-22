@@ -26,8 +26,8 @@ defined ('_JEXEC') or die('Restricted access');
 	} else {
 		if (!($this->product->prices['salesPrice'] == $this->product->prices['costPrice'] || (!isset($this->product->prices['costPrice'])))){
 			echo $this->currency->createPriceDiv ('costPrice', '', $this->product->prices['costPrice']);
-			echo $this->currency->createPriceDiv ('salesPrice', '', $this->product->prices['salesPrice'],false,false,1.0,false,'');
 			echo $this->currency->createPriceDiv ('discountAmount', '', $this->product->prices['discountAmount'],false,false,1.0,false,'');
+			echo $this->currency->createPriceDiv ('salesPrice', '', $this->product->prices['salesPrice'],false,false,1.0,false,'');
 		} else {
 			echo $this->currency->createPriceDiv ('salesPrice', '', $this->product->prices['salesPrice'],false,false,1.0,false,'only');
 		}

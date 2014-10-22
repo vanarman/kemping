@@ -8,8 +8,12 @@
 .width50-num {width: calc(50% - 16px)}
 .width60 {width: 60%;}
 .width70 {width: 70%;}
+.marginAuto {margin: 0 auto;}
 
 @media all and (max-width:1199px) {
+   .width3 {
+      width: 50% !important;
+   }
 	#wrapper {
 	   width: 1000px !important;
 	}
@@ -21,13 +25,17 @@
 	}
 
    .spacer-buy-area .price-area {
-      margin: 0 40px 0 0 !important;
+      margin: 0 20px 0 0 !important;
    }
 
    #wrapper-content {
       display: table;
       margin-left: 40px;
       width: 960px !important;
+   }
+
+   .continue-shoping {
+      left: 322px !important;
    }
 
    div.logo-image {
@@ -196,6 +204,61 @@ aside#left ul.menu li:hover > ul {
    position: absolute;
    top:0;
    left: 190px;
+}
+
+form.loginFormLeftSide {
+   width: 179px;
+   border: 1px solid rgba(50, 154, 28, 0.5);
+   padding: 10px;
+   margin-top: 10px;
+}
+
+form.loginFormLeftSide p {
+   margin: 0px;
+   padding: 0px;
+}
+
+form.loginFormLeftSide p > label {
+   float: left;
+   width: 60px;
+   padding-top: 8px;
+}
+
+form.loginFormLeftSide p > input {
+   width: 100px;
+}
+
+form.loginFormLeftSide p#form-login-remember > label {
+   float: right;
+   width: 155px;
+   padding-top: 0px;
+}
+
+form.loginFormLeftSide p#form-login-remember > input {
+   width: 20px;
+   float: left;
+}
+
+form.loginFormLeftSide input.button {
+margin: 10px auto;
+display: table;
+}
+
+form.loginFormLeftSide > ul {
+   margin: 0;
+   padding: 0;
+}
+
+form.loginFormLeftSide ul li {
+   list-style: none;
+}
+
+form.loginFormLeftSide ul li > a {
+   padding: 1px 0px !important;
+   width: 180px;
+   height: 20px !important;
+   display: table;
+   margin: 3px 0;
 }
 
 div#topbaner {
@@ -430,14 +493,15 @@ div.vm-pagination ul li {
 .costumFildTitle {
    display: table;
    float: left;
-   padding: 5px 0 0 0;
-   width: 80px;
+   padding-top: 12px;
+   width: 60px;
    font-weight: bold;
 }
 
 .costumFildsBlock select {
-   width: calc(100% - 80px);
+   width: 100px;
    float: left;
+   margin-top: 5px;
 }
 
 .costumFildsBlock select:after {
@@ -462,6 +526,12 @@ div.vm-pagination ul li {
    color: rgb(255,255,255);
 }
 
+.discountAndOldPrice {
+   margin: 0 auto;
+   display: table;
+   width: 200px;
+}
+
 .price-area span.PricesalesPrice {
    border: 1px solid;
    padding: 2px 5px;
@@ -480,8 +550,13 @@ div.vm-pagination ul li {
    box-shadow: none;
 }
 
+.price-area span.PricesalesPrice.productdet {
+   margin: 0 auto;
+}
+
 .price-area span.PricesalesPrice.only {
    top: 7px;
+   margin: 0 auto;
 }
 
 .price-area div.PricediscountAmount:before {
@@ -543,6 +618,12 @@ top: 2px;
    display: table;
    width: 100%;
    margin: 0 auto;
+}
+
+.addtocartBlock {
+   margin: 15px auto 0px;
+   display: table;
+   width: 140px;
 }
 
 input.quantity-input {
@@ -624,7 +705,8 @@ span.vote {
 
 .spacer-buy-area .price-area {
    float: left;
-   margin: 0px 70px 0px 30px;
+   margin: 0px 10px;
+   width: 180px;
 }
 
 .spacer-buy-area {
@@ -708,7 +790,9 @@ form#com-form-login > fieldset.userdata > p {
 
 input.login-btn, a#output-billto-edit, a#output-shipto-add,
 .peymentAndDeliveryMethods button.vm-button-correct,
-.checkout-button-top > button#checkoutFormSubmit, .continue-shoping > a {
+.checkout-button-top > button#checkoutFormSubmit, .continue-shoping > a,
+form.loginFormLeftSide input.button,
+form.loginFormLeftSide ul > li > a {
    background-color: rgb(50, 154, 28);
    border: none;
    border-color: rgb(50, 154, 28);

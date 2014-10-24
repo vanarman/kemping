@@ -64,9 +64,17 @@ if (!empty($this->product->images)) {
 	$image = $this->product->images[0];
 	?>
 	<div class="main-image">
-		<a href="<?php echo $image->file_url; ?>" title="<?php echo $image->file_name; ?>" rel="vm-additional-images">
-			<img src="<?php echo $image->file_url; ?>" alt="<?php echo $image->file_name; ?>" />
+		<a href="#openWindow">
+			<img src="<?php echo $image->file_url; ?>" alt="<?php echo $image->file_name; ?>" title="<?php echo $image->file_name; ?>" />
 		</a>
+		
+		<!-- Модальное окно №5 -->
+	        <a href="#x" class="overlay" id="openWindow"></a>
+	        <div class="popup">
+			<img src="<?php echo $image->file_url; ?>" alt="<?php echo $image->file_name; ?>" title="<?php echo $image->file_name; ?>" />
+			<p><?php echo $image->file_title; ?></p>
+			<a class="close" title="Закрыть" href="#close"></a>
+	        </div>
 		<?php
 		//echo $image->displayMediaFull("",true,"rel='vm-additional-images'");
 		//print_r($image);

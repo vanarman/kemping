@@ -1,3 +1,126 @@
+/* Форимируем слой затемнения фона */
+.overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    bottom: 0;
+    cursor: default;
+    left: 0;
+    opacity: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    z-index: 1;
+    -webkit-transition: opacity .5s;
+    -moz-transition: opacity .5s;
+    -ms-transition: opacity .5s;
+    -o-transition: opacity .5s;
+    transition: opacity .5s;
+}
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+/* Позиционирум медиа-элементы внутри окна */
+.is-image {
+  width: 100%;
+  display: inline-block;
+  height: auto;
+  margin: auto;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+embed, iframe {
+  width: 100%;
+  min-width: 320px;
+  max-width: 600px;
+ 
+  margin: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+/* Формируем и позиционируем всплывающее окно */
+.popup { 
+    min-width: 320px;
+    max-width: 600px;
+    width: 600px;
+    margin: auto;
+    background-color: #fff;
+    border: 3px solid #fff;
+    display: block;
+    left: 0; right: 0;
+    opacity: 0;
+    padding: 15px;
+    position: fixed;
+    font-size: 14px;
+    top: 0;
+    visibility: hidden;
+    z-index: 10;
+/* Скругление углов окна  */	
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+/* Тень блока окна  */	
+    -webkit-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    -moz-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    -ms-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    -o-box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+    box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.4) inset;
+/* Устанавливаем эффект перехода появления окна */ 
+    -webkit-transition: opacity .5s, top .5s;
+    -moz-transition: opacity .5s, top .5s;
+    -ms-transition: opacity .5s, top .5s;
+    -o-transition: opacity .5s, top .5s;
+    transition: opacity .5s, top .5s;
+}
+.popup img {
+    margin: 0 auto;
+    display: block;
+}
+/* Устанавливаем позицию появления окна */ 
+.overlay:target+.popup {
+    top: 5%;
+    opacity: 1;
+    visibility: visible;
+}
+/* Оформляем и позицонируем кнопку закрытия */
+.close {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 2px solid #ccc;
+    height: 24px;
+    line-height: 24px;
+    position: absolute;
+    right: -13px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;padding: 0;
+    top: -15px;
+    width: 24px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    border-radius: 15px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+.close:before {
+    color: rgba(255, 255, 255, 0.9);
+    content: "X";
+    font-size: 14px;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.9);
+}
+.close:hover {
+    background-color: rgba(64, 128, 128, 0.8);
+}
+.popup p, .popup div {
+    margin-bottom: 10px;
+}
+
+
 .clear {clear: both;}
 .floatleft {float: left;}
 .floatright {float: right;}
@@ -39,8 +162,13 @@
    }
 
    div.logo-image {
-      width: 925px !important;
+      width: 900px !important;
       margin-left: 70px !important;
+   }
+   
+   .addtocartBlock-bar .addtocartBlock, .addtocartBlock-bar .costumFildsBlock {
+   	float: none !important;
+   	margin: 0 auto;
    }
 
    footer .custom {
@@ -92,7 +220,8 @@ header {
    display: inline;
    position: absolute;
    width: 2px;
-   height: 20px;
+   margin-top: 6px;
+   height: 10px;
    background-color: rgb(211, 211, 211);;
    content: " ";
 }
@@ -143,7 +272,7 @@ div#search form div.search input#mod-search-searchword {
 div.logo-image {
    width: 100%;
    margin: 0 auto;
-   display: table;
+   display: block;
 }
 
 div.logo-image img.logo {
@@ -262,7 +391,7 @@ form.loginFormLeftSide ul li > a {
 }
 
 div#topbaner {
-   display: table;
+   display: block;
    margin: 20px auto;
 }
 
@@ -279,7 +408,8 @@ div.breadcrumbs {
 
 section#content {
    margin: 0 auto;
-   display: table;
+   display: block;
+   
    width: 100%;
 }
 
@@ -404,7 +534,7 @@ div.orderby-displaynumber {
 .orderlistcontainer a :hover{text-decoration:none;display:block;color:#EEE;background:#777;}
 .orderlistcontainer div.orderlist{display:none;position:absolute;border:solid #CAC9C9 1px;background:#FFF;cursor:pointer;z-index: 1;}
 .orderlistcontainer div.orderlist div{padding:2px 12px 1px;}
-.orderlistcontainer div.orderlist div:hover{color:#EEE;background:#CAC9C9;}
+.orderlistcontainer div.orderlist div:hover{color:#EEE;/*background:#CAC9C9*/;}
 
 div.display-number {
    float: left;
@@ -491,16 +621,16 @@ div.vm-pagination ul li {
 }
 
 .costumFildTitle {
-   display: table;
+   display: block;
    float: left;
-   padding-top: 12px;
+   padding-top: 15px;
    width: 60px;
    font-weight: bold;
 }
 
 .costumFildsBlock select {
    width: 100px;
-   float: left;
+   /*float: left;*/
    margin-top: 5px;
 }
 
@@ -529,7 +659,7 @@ div.vm-pagination ul li {
 .discountAndOldPrice {
    margin: 0 auto;
    display: table;
-   width: 200px;
+   width: 210px;
 }
 
 .price-area span.PricesalesPrice {
@@ -620,10 +750,11 @@ top: 2px;
    margin: 0 auto;
 }
 
-.addtocartBlock {
-   margin: 15px auto 0px;
-   display: table;
-   width: 140px;
+.addtocartBlock, .costumFildsBlock {
+   /*margin: 15px auto 0px;*/
+   display: block;
+   float: left;
+   width: 170px;
 }
 
 input.quantity-input {
@@ -706,13 +837,19 @@ span.vote {
 .spacer-buy-area .price-area {
    float: left;
    margin: 0px 10px;
-   width: 180px;
+   width: 220px;
+   min-height: 35px;
 }
 
 .spacer-buy-area {
 width: 100%;
 display: table;
 margin-bottom: -50px;
+}
+
+.addtocart-area {
+display: block;
+float: left;
 }
 
 .productdetails span.PricediscountAmount.productdet {
@@ -1050,6 +1187,3 @@ footer #menu {
 .item-page {
    
 }
-
-
-

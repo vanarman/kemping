@@ -1,9 +1,9 @@
-<?php defined ('_JEXEC') or die('Restricted access');
+	<?php defined('_JEXEC') or die('Restricted access');
 /**
  *
  * Layout for the shopping cart
  *
- * @package    VirtueMart
+ * @package	VirtueMart
  * @subpackage Cart
  * @author Max Milbers
  * @author Patrick Kohl
@@ -16,377 +16,221 @@
  * other free or open source software licenses.
  *
  */
+JHTML::stylesheet ( 'plugins/system/onepage/onepage.css');
+// Check to ensure this file is included in Joomla!
+$plugin=JPluginHelper::getPlugin('system','onepage');
+$params=new JRegistry($plugin->params);
+$this->params=$params;
 ?>
-<div class="billto-shipto" >
-	<div class="width50 floatleft">
+<?php 
+if($this->params->get('address_position',0)==0) {
+	echo $this->loadTemplate('address'); 
+}
+?>
+<fieldset id="cart-contents" class="checkpage">
+	<table class="cart-summary" border="0" width="100%">
+  	<thead>
+		<tr>
+			<th><?php echo JText::_('COM_VIRTUEMART_CART_NAME') ?></th>
+			<th><?php echo JText::_('COM_VIRTUEMART_CART_SKU') ?></th>
+			<th><?php echo JText::_('COM_VIRTUEMART_CART_QUANTITY') ?> / <?php echo JText::_('COM_VIRTUEMART_CART_ACTION') ?></th>
+      <?php if ( VmConfig::get('show_tax')) { ?>
+      <th><?php  echo "<span class='priceColor2'>".JText::_('COM_VIRTUEMART_CART_SUBTOTAL_TAX_AMOUNT')."</span>" ?></th>
+				<?php } ?>
+      <th><?php echo "<span class='priceColor2'>".JText::_('COM_VIRTUEMART_CART_SUBTOTAL_DISCOUNT_AMOUNT')."</span>" ?></th>
+			<th><?php echo JText::_('COM_VIRTUEMART_CART_TOTAL') ?></th>
+			</tr>
+        	</thead>
+					<tbody>
 
-		<span><span class="vmicon vm2-billto-icon"></span>
-			<?php echo JText::_ ('COM_VIRTUEMART_USER_FORM_BILLTO_LBL'); ?></span>
-		<?php // Output Bill To Address ?>
-		<div class="output-billto" id="output-billto">
-			<?php
 
-			foreach ($this->cart->BTaddress['fields'] as $item) {
-				if (!empty($item['value'])) {
-					if ($item['name'] === 'agreed') {
-						$item['value'] = ($item['value'] === 0) ? JText::_ ('COM_VIRTUEMART_USER_FORM_BILLTO_TOS_NO') : JText::_ ('COM_VIRTUEMART_USER_FORM_BILLTO_TOS_YES');
-					}
-					?><!-- span class="titles"><?php echo $item['title'] ?></span -->
-					<span class="values vm2<?php echo '-' . $item['name'] ?>"><?php echo $this->escape ($item['value']) ?></span>
-					<?php if ($item['name'] != 'title' and $item['name'] != 'first_name' and $item['name'] != 'middle_name' and $item['name'] != 'zip') { ?>
-						<br class="clear"/>
-						<?php
-					}
-				}
-			} ?>
-			<div class="clear"></div>
-		</div>
+		<?php
+		$i=1;
+		foreach( $this->cart->products as $pkey =>$prow ) {
+			?>
+			<tr class="sectiontableentry<?php echo $i ?>" id="product_row_<?php echo $pkey; ?>">
+				<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_NAME') ?>">
+					<?php if ( $prow->virtuemart_media_id) {  ?>
+						<span class="cart-images">
+						 <?php
+						 if(!empty($prow->image)) echo $prow->image->displayMediaThumb('',false);
+						 ?>
+						</span>
+					<?php } ?>
+					<?php echo JHTML::link($prow->url, $prow->product_name).$prow->customfields; ?>
 
-		<a class="details output-billto-edit" id="output-billto-edit" href="<?php echo JRoute::_ ('index.php?option=com_virtuemart&view=user&task=editaddresscart&addrtype=BT', $this->useXHTML, $this->useSSL) ?>" rel="nofollow">
-			<?php echo JText::_ ('COM_VIRTUEMART_USER_FORM_EDIT_BILLTO_LBL'); ?>
-		</a>
-
-		<input type="hidden" name="billto" value="<?php echo $this->cart->lists['billTo']; ?>"/>
-	</div>
-
-	<div class="width50 floatleft">
-
-		<span><span class="vmicon vm2-shipto-icon"></span>
-			<?php echo JText::_ ('COM_VIRTUEMART_USER_FORM_SHIPTO_LBL'); ?></span>
-		<?php // Output Bill To Address ?>
-		<div class="output-shipto" id="output-shipto">
-			<?php
-			if (empty($this->cart->STaddress['fields'])) {
-				echo JText::sprintf ('COM_VIRTUEMART_USER_FORM_EDIT_BILLTO_EXPLAIN', JText::_ ('COM_VIRTUEMART_USER_FORM_ADD_SHIPTO_LBL'));
-			} else {
-				if (!class_exists ('VmHtml')) {
-					require(JPATH_VM_ADMINISTRATOR . DS . 'helpers' . DS . 'html.php');
-				}
-				echo JText::_ ('COM_VIRTUEMART_USER_FORM_ST_SAME_AS_BT');
-				echo VmHtml::checkbox ('STsameAsBTjs', $this->cart->STsameAsBT) . '<br />';
+				</td>
+				<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SKU') ?>"><?php  echo $prow->product_sku ?></td>
+				<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_QUANTITY') ?> / <?php echo JText::_('COM_VIRTUEMART_CART_ACTION') ?>">
+				<input type="text" title="<?php echo  JText::_('COM_VIRTUEMART_CART_UPDATE') ?>" class="inputbox" size="3" maxlength="4" value="<?php echo $prow->quantity ?>" id='quantity_<?php echo $pkey; ?>'/>
+				<input type="button" class="vmicon vm2-add_quantity_cart" name="update" title="<?php echo  JText::_('COM_VIRTUEMART_CART_UPDATE') ?>" align="middle" onclick="update_form('update_product','<?php echo $pkey; ?>');"/>
+				<a class="vmicon vm2-remove_from_cart" title="<?php echo JText::_('COM_VIRTUEMART_CART_DELETE') ?>" align="middle" href="javascript:void(0)" onclick="update_form('remove_product','<?php echo $pkey; ?>')"> </a>
+				</td>
+         
+				<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_DISCOUNT_AMOUNT') ?>"><?php echo "<span class='priceColor2' id='subtotal_discount_".$pkey."'>".$this->currencyDisplay->createPriceDiv('discountAmount','', $this->cart->pricesUnformatted[$pkey],false,false,$prow->quantity)."</span>" ?></td>
+				<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_TOTAL') ?>" id="subtotal_with_tax_<?php echo $pkey; ?>">
+				<?php 
+				if (VmConfig::get('checkout_show_origprice',1) && !empty($this->cart->pricesUnformatted[$pkey]['basePriceWithTax']) && $this->cart->pricesUnformatted[$pkey]['basePriceWithTax'] != $this->cart->pricesUnformatted[$pkey]['salesPrice'] ) {
+	                            echo '<span class="line-through">'.$this->currencyDisplay->createPriceDiv('basePriceWithTax','', $this->cart->pricesUnformatted[$pkey],true,false,$prow->quantity) .'</span><br />' ;
+    		                }
+				echo $this->currencyDisplay->createPriceDiv('salesPrice','', $this->cart->pricesUnformatted[$pkey],false,false,$prow->quantity);
 				?>
-				<div id="output-shipto-display">
-					<?php
-					foreach ($this->cart->STaddress['fields'] as $item) {
-						if (!empty($item['value'])) {
-							?>
-							<!-- <span class="titles"><?php echo $item['title'] ?></span> -->
-							<?php
-							if ($item['name'] == 'first_name' || $item['name'] == 'middle_name' || $item['name'] == 'zip') {
-								?>
-								<span class="values<?php echo '-' . $item['name'] ?>"><?php echo $this->escape ($item['value']) ?></span>
-								<?php } else { ?>
-								<span class="values"><?php echo $this->escape ($item['value']) ?></span>
-								<br class="clear"/>
-								<?php
-							}
-						}
-					}
-					?>
-				</div>
-				<?php
-			}
-			?>
-			<div class="clear"></div>
-		</div>
-		<?php if (!isset($this->cart->lists['current_id'])) {
-		$this->cart->lists['current_id'] = 0;
-	} ?>
-		<a class="details output-shipto-add" id="output-shipto-add" href="<?php echo JRoute::_ ('index.php?option=com_virtuemart&view=user&task=editaddresscart&addrtype=ST&virtuemart_user_id[]=' . $this->cart->lists['current_id'], $this->useXHTML, $this->useSSL) ?>" rel="nofollow">
-			<?php echo JText::_ ('COM_VIRTUEMART_USER_FORM_ADD_SHIPTO_LBL'); ?>
-		</a>
-	</div>
+				</td>
+			</tr>
+		<?php
+		//echo "<pre>";print_r($this->cart->pricesUnformatted['salesPrice']);echo "</pre>";
+			$i = 1 ? 2 : 1;
+		} ?>
+		<!--Begin of SubTotal, Tax, Shipment, Coupon Discount and Total listing -->
+                  <?php if ( VmConfig::get('show_tax')) { $colspan=3; } else { $colspan=2; } ?>
+		  <tr class="sectiontableentry1">
+			<td colspan="3"><?php echo JText::_('COM_VIRTUEMART_ORDER_PRINT_PRODUCT_PRICES_TOTAL'); ?></td>
+                        <?php if ( VmConfig::get('show_tax')) { ?>
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_TAX_AMOUNT') ?>"><?php echo "<span  class='priceColor2' id='tax_amount'>".$this->currencyDisplay->createPriceDiv('taxAmount','', $this->cart->pricesUnformatted,false)."</span>" ?></td>
+                        <?php } ?>
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_DISCOUNT_AMOUNT') ?>"><?php echo "<span  class='priceColor2' id='discount_amount'>".$this->currencyDisplay->createPriceDiv('discountAmount','', $this->cart->pricesUnformatted,false)."</span>" ?></td>
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_TOTAL') ?>" id="sales_price"><?php echo $this->currencyDisplay->createPriceDiv('salesPrice','', $this->cart->pricesUnformatted,false) ?></td>
+		  </tr>
 
-	<div class="clear"></div>
-</div>
-
-<fieldset>
-<table class="cart-summary" cellspacing="0" cellpadding="0" border="0"	width="100%">
-<tr>
-	<th align="left"><?php echo JText::_ ('COM_VIRTUEMART_CART_NAME') ?></th>
-	<th align="center"><?php echo JText::_ ('COM_VIRTUEMART_CART_SKU') ?></th>
-	<th align="center" width="90px"><?php echo JText::_ ('COM_VIRTUEMART_CART_QUANTITY') ?>/<?php echo JText::_ ('COM_VIRTUEMART_CART_ACTION') ?></th>
-	<th align="center" width="70px"><?php echo JText::_ ('COM_VIRTUEMART_CART_PRICE') ?></th>
-	<?php if (VmConfig::get ('show_tax')) { ?>
-		<th align="center" width="70px"><?php  echo "<span  class='priceColor2'>" . JText::_ ('COM_VIRTUEMART_CART_SUBTOTAL_TAX_AMOUNT') . '</span>' ?></th>
-	<?php } ?>
-	<th align="center" width="70px"><?php echo "<span  class='priceColor2'>" . JText::_ ('COM_VIRTUEMART_CART_SUBTOTAL_DISCOUNT_AMOUNT') . '</span>' ?></th>
-	<th align="center" width="90px"><?php echo JText::_ ('COM_VIRTUEMART_CART_TOTAL') ?></th>
-</tr>
-
-<?php
-$i = 1;
-// 		vmdebug('$this->cart->products',$this->cart->products);
-foreach ($this->cart->products as $pkey => $prow) {
-	?>
-	<tr valign="top" class="sectiontableentry<?php echo $i ?> product-cart-list">
-		<td align="left">
-			<div class="productDescription">
-				<?php if ($prow->virtuemart_media_id) { ?>
-					<span class="cart-images">
-						<?php
-						if (!empty($prow->image)) {
-							echo $prow->image->displayMediaThumb ('', FALSE);
-						}
-						?>
-					</span>
-				<?php } ?>
-				<?php echo JHTML::link ($prow->url, $prow->product_name) . $prow->customfields; ?>
-			</div>
-		</td>
-		<td align="left"><div class="productSKU"><?php  echo $prow->product_sku ?></div></td>
-		<td align="right"><?php
-	//				$step=$prow->min_order_level;
-					if ($prow->step_order_level)
-						$step=$prow->step_order_level;
-					else
-						$step=1;
-					if($step==0)
-						$step=1;
-					$alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
-					?>
-	                <script type="text/javascript">
-					function check<?php echo $step?>(obj) {
-	 				// use the modulus operator '%' to see if there is a remainder
-					remainder=obj.value % <?php echo $step?>;
-					quantity=obj.value;
-	 				if (remainder  != 0) {
-	 					alert('<?php echo $alert?>!');
-	 					obj.value = quantity-remainder;
-	 					return false;
-	 				}
-	 				return true;
-	 				}
-					</script>
-
-					<!--<input type="text" title="<?php echo  JText::_('COM_VIRTUEMART_CART_UPDATE') ?>" class="inputbox" size="3" maxlength="4" name="quantity" value="<?php echo $prow->quantity ?>" /> -->
-	            <input type="text"
-					   onblur="check<?php echo $step?>(this);"
-					   onclick="check<?php echo $step?>(this);"
-					   onchange="check<?php echo $step?>(this);"
-					   onsubmit="check<?php echo $step?>(this);"
-					   title="<?php echo  JText::_('COM_VIRTUEMART_CART_UPDATE') ?>" class="quantity-input js-recalculate" size="3" maxlength="4" name="quantity[<?php echo $prow->cart_item_id ?>]" value="<?php echo $prow->quantity ?>" />
-				<input type="submit" class="vmicon vm2-add_quantity_cart" name="update[<?php echo $prow->cart_item_id ?>]" title="<?php echo  JText::_ ('COM_VIRTUEMART_CART_UPDATE') ?>" align="middle" value=""/>
-
-			<a class="vmicon vm2-remove_from_cart" title="<?php echo JText::_ ('COM_VIRTUEMART_CART_DELETE') ?>" align="middle" href="<?php echo JRoute::_ ('index.php?option=com_virtuemart&view=cart&task=delete&cart_virtuemart_product_id=' . $prow->cart_item_id) ?>" rel="nofollow"> </a>
-		</td>
-		<td align="center">
 			<?php
-			$overridePrice = $this->cart->products[$pkey]->product_price;
-			echo '<span class="line-through price">' . number_format($overridePrice, 2, ',', ' ') .'</span>';
+		if (VmConfig::get('coupons_enable')) {
+		?>
+			<tr class="sectiontableentry2">
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_COUPON_CODE_ENTER') ?>" colspan="3">
+				    <?php if(!empty($this->layoutName) && $this->layoutName=='default') {
+					    echo $this->loadTemplate('coupon');
+				    }
+				?>
 
-			if ($this->cart->pricesUnformatted[$pkey]['discountedPriceWithoutTax']) {
-				echo $this->currencyDisplay->createPriceDiv ('discountedPriceWithoutTax', '', $this->cart->pricesUnformatted[$pkey], FALSE, FALSE);
-			} else {
-				echo $this->currencyDisplay->createPriceDiv ('basePriceVariant', '', $this->cart->pricesUnformatted[$pkey], FALSE, FALSE);
-			}
-			// 					echo $prow->salesPrice ;
-			?>
-		</td>
-		<?php if (VmConfig::get ('show_tax')) { ?>
-		<td align="center"><?php echo "<span class='priceColor2 discount'>" . $this->currencyDisplay->createPriceDiv ('taxAmount', '', $this->cart->pricesUnformatted[$pkey], FALSE, FALSE, $prow->quantity) . "</span>" ?></td>
+					 <?php
+						echo "<span id='coupon_code_txt'>".@$this->cart->cartData['couponCode']."</span>";
+						echo @$this->cart->cartData['couponDescr'] ? (' (' . $this->cart->cartData['couponDescr'] . ')' ): '';
+						?>
+
+				</td>
+					 <?php if ( VmConfig::get('show_tax')) { ?>
+					<td id="coupon_tax"><?php echo $this->currencyDisplay->createPriceDiv('couponTax','', @$this->cart->pricesUnformatted['couponTax'],false); ?> </td>
+					 <?php } ?>
+					<td>&nbsp;</td>
+					<td id="coupon_price"><?php echo $this->currencyDisplay->createPriceDiv('salesPriceCoupon','', @$this->cart->pricesUnformatted['salesPriceCoupon'],false); ?> </td>
+			</tr>
 		<?php } ?>
-		<td align="center"><?php echo "<span class='priceColor2 discount'>" . $this->currencyDisplay->createPriceDiv ('discountAmount', '', $this->cart->pricesUnformatted[$pkey], FALSE, FALSE, $prow->quantity) . "</span>" ?></td>
-		<td colspan="1" align="right">
-			<div class="totalPrice">
-				<?php
-				/*if (VmConfig::get ('checkout_show_origprice', 1) && !empty($this->cart->pricesUnformatted[$pkey]['basePriceWithTax']) && $this->cart->pricesUnformatted[$pkey]['basePriceWithTax'] != $this->cart->pricesUnformatted[$pkey]['salesPrice']) {
-					echo '<span class="line-through totalPrce">' . $this->currencyDisplay->createPriceDiv ('basePriceWithTax', '', $this->cart->pricesUnformatted[$pkey], TRUE, FALSE, $prow->quantity) . '</span><br />';
-				}*/
-				/*elseif (VmConfig::get ('checkout_show_origprice', 1) && empty($this->cart->pricesUnformatted[$pkey]['basePriceWithTax']) && $this->cart->pricesUnformatted[$pkey]['basePriceVariant'] != $this->cart->pricesUnformatted[$pkey]['salesPrice']) {
-					echo '<span class="line-through">' . $this->currencyDisplay->createPriceDiv ('basePriceVariant', '', $this->cart->pricesUnformatted[$pkey], TRUE, FALSE, $prow->quantity) . '</span><br />';
-				}*/
-				echo $this->currencyDisplay->createPriceDiv ('salesPrice', '', $this->cart->pricesUnformatted[$pkey], FALSE, FALSE, $prow->quantity) ?></td>
-			</div>
-	</tr>
-	<?php
-	$i = ($i==1) ? 2 : 1;
-} ?>
 
-<?php if (VmConfig::get ('show_tax')) {
-	$colspan = 3;
-} else {
-	$colspan = 2;
-} ?>
 
-	<tr class="sectiontableentry1 totalPricePricelist">
-		<td colspan="4" align="right"><?php echo JText::_ ('COM_VIRTUEMART_ORDER_PRINT_PRODUCT_PRICES_TOTAL'); ?></td>
-
-		<?php if (VmConfig::get ('show_tax')) { ?>
-		<td align="right"><?php echo "<span  class='priceColor2'>" . $this->currencyDisplay->createPriceDiv ('taxAmount', '', $this->cart->pricesUnformatted, FALSE) . "</span>" ?></td>
-		<?php } ?>
-		<td align="right"><?php echo "<span  class='priceColor2'>" . $this->currencyDisplay->createPriceDiv ('discountAmount', '', $this->cart->pricesUnformatted, FALSE) . "</span>" ?></td>
-		<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ('salesPrice', '', $this->cart->pricesUnformatted, FALSE) ?></td>
-	</tr>
-	<?php
-	if (VmConfig::get ('coupons_enable')) { ?>
-		<tr class="sectiontableentry2">
-			<td colspan="4" align="left"> <?php 
-				if (!empty($this->layoutName) && $this->layoutName == 'default') {
-					// echo JHTML::_('link', JRoute::_('index.php?view=cart&task=edit_coupon',$this->useXHTML,$this->useSSL), JText::_('COM_VIRTUEMART_CART_EDIT_COUPON'));
-					echo $this->loadTemplate ('coupon');
-					}
-				if (!empty($this->cart->cartData['couponCode'])) {
-					echo $this->cart->cartData['couponCode'];
-					echo $this->cart->cartData['couponDescr'] ? (' (' . $this->cart->cartData['couponDescr'] . ')') : '';
-				} ?>
-			</td> <?php 
-			if (VmConfig::get ('show_tax')) { ?>
-				<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ('couponTax', '', $this->cart->pricesUnformatted['couponTax'], FALSE); ?> </td><?php 
-			} ?>
-			<td align="right"> </td>
-			<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ('salesPriceCoupon', '', $this->cart->pricesUnformatted['salesPriceCoupon'], FALSE); ?> </td>		
-		</tr><?php 
-	} 
-
-	foreach ($this->cart->cartData['DBTaxRulesBill'] as $rule) { ?>
-		<tr class="sectiontableentry<?php echo $i ?>">
-			<td colspan="4" align="right"><?php echo $rule['calc_name'] ?> </td><?php 
-			if (VmConfig::get ('show_tax')) { ?>
-				<td align="right"></td> <?php 
-			} ?>
-			<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ($rule['virtuemart_calc_id'] . 'Diff', '', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'] . 'Diff'], FALSE); ?></td>
-			<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ($rule['virtuemart_calc_id'] . 'Diff', '', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'] . 'Diff'], FALSE); ?> </td>
-		</tr>
 		<?php
-		if ($i) {
-			$i = 1;
-		} else {
-			$i = 0;
-		}
-	}
-
-	foreach ($this->cart->cartData['taxRulesBill'] as $rule) { ?>
-		<tr class="sectiontableentry<?php echo $i ?>">
-			<td colspan="4" align="right"><?php echo $rule['calc_name'] ?> </td>
-			<?php if (VmConfig::get ('show_tax')) { ?>
-			<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ($rule['virtuemart_calc_id'] . 'Diff', '', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'] . 'Diff'], FALSE); ?> </td>
-			<?php } ?>
-			<td align="right"><?php ?> </td>
-			<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ($rule['virtuemart_calc_id'] . 'Diff', '', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'] . 'Diff'], FALSE); ?> </td>
-		</tr>
-		<?php
-		if ($i) {
-			$i = 1;
-		} else {
-			$i = 0;
-		}
-	}
-
-	foreach ($this->cart->cartData['DATaxRulesBill'] as $rule) { ?>
-			<tr class="sectiontableentry<?php echo $i ?>">
-				<td colspan="4" align="right"><?php echo   $rule['calc_name'] ?> </td>
-
-				<?php if (VmConfig::get ('show_tax')) { ?>
-				<td align="right"></td>
-
-				<?php } ?>
-				<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ($rule['virtuemart_calc_id'] . 'Diff', '', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'] . 'Diff'], FALSE); ?>  </td>
-				<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ($rule['virtuemart_calc_id'] . 'Diff', '', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'] . 'Diff'], FALSE); ?> </td>
+		foreach($this->cart->cartData['DBTaxRulesBill'] as $rule){ ?>
+			<tr class="sectiontableentry<?php $i ?>  DBTaxRulesBill_tr">
+				<td colspan="3"><?php echo $rule['calc_name'] ?> </td>
+                                   <?php if ( VmConfig::get('show_tax')) { ?>
+				<td>&nbsp;</td>
+                                <?php } ?>
+				<td><?php echo $this->currencyDisplay->createPriceDiv($rule['virtuemart_calc_id'].'Diff','', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'].'Diff'],false);  ?></td>
+				<td><?php echo $this->currencyDisplay->createPriceDiv($rule['virtuemart_calc_id'].'Diff','', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'].'Diff'],false);   ?></td>
 			</tr>
 			<?php
-			if ($i) {
-				$i = 1;
-			} else {
-				$i = 0;
-			}
-	}?>
-	</table>
-</fieldset>
-	<div class="peymentAndDeliveryMethods">
-		<div class="deliveryMethod width50-num floatleft">
-		<?php 
-			if (VmConfig::get('oncheckout_opc',true) or !VmConfig::get('oncheckout_show_steps',false) or (!VmConfig::get('oncheckout_opc',true) and VmConfig::get('oncheckout_show_steps',false) and !empty($this->cart->virtuemart_shipmentmethod_id))) {
-				if (!$this->cart->automaticSelectedShipment) { ?>
-					<span class="notify"> <?php echo $this->cart->cartData['shipmentName']; ?></span><?php
-					if (!empty($this->layoutName) && $this->layoutName == 'default' && !$this->cart->automaticSelectedShipment)	{
-						if (VmConfig::get('oncheckout_opc', 1)) {
-							$previouslayout = $this->setLayout('select');
-							echo $this->loadTemplate('shipment');
-							$this->setLayout($previouslayout);
-						} else {
-							echo JHTML::_('link', JRoute::_('index.php?view=cart&task=edit_shipment', $this->useXHTML, $this->useSSL), $this->select_shipment_text, 'class=""');
-						}
-					} else {
-						echo JText::_ ('COM_VIRTUEMART_CART_SHIPPING');
-					}
-				} else {
-					echo $this->cart->cartData['shipmentName'];
-				}
-			} else {
-		 		echo $this->cart->cartData['shipmentName'];
-			} ?>
-		</div>
-		
+			if($i) $i=1; else $i=0;
+		} ?>
 
 		<?php
-		if (VmConfig::get ('show_tax')) {
-			echo "<span  class='priceColor2'>" . $this->currencyDisplay->createPriceDiv ('shipmentTax', '', $this->cart->pricesUnformatted['shipmentTax'], FALSE) . "</span>";
-		}
-		if($this->cart->pricesUnformatted['salesPriceShipment'] < 0) 
-			echo $this->currencyDisplay->createPriceDiv ('salesPriceShipment', '', $this->cart->pricesUnformatted['salesPriceShipment'], FALSE);
-			//echo $this->currencyDisplay->createPriceDiv ('salesPriceShipment', '', $this->cart->pricesUnformatted['salesPriceShipment'], FALSE);
-			  ?>
 
-		<div class="paymentMethod width50-num floatleft">
-			<?php 
-			if (!$this->cart->automaticSelectedPayment) { ?>
-				<span class="notify"><?php echo $this->cart->cartData['paymentName']; ?></span><?php
-				
-				if (!empty($this->layoutName) && !$this->cart->automaticSelectedPayment) {
-					if (VmConfig::get('oncheckout_opc', 1)) {
-						$previouslayout = $this->setLayout('select');
-						echo $this->loadTemplate('payment');
-						$this->setLayout($previouslayout);
-					} else {
-						echo JHTML::_('link', JRoute::_('index.php?view=cart&task=editpayment', $this->useXHTML, $this->useSSL), $this->select_payment_text, 'class=""');
-					}
+		foreach($this->cart->cartData['taxRulesBill'] as $rule){ ?>
+			<tr class="sectiontableentry<?php $i ?> taxRulesBill_tr">
+				<td colspan="3"><?php echo $rule['calc_name'] ?> </td>
+				<?php if ( VmConfig::get('show_tax')) { ?>
+				<td><?php echo $this->currencyDisplay->createPriceDiv($rule['virtuemart_calc_id'].'Diff','', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'].'Diff'],false); ?> </td>
+				 <?php } ?>
+				<td><?php ?></td>
+				<td><?php echo $this->currencyDisplay->createPriceDiv($rule['virtuemart_calc_id'].'Diff','', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'].'Diff'],false);   ?> </td>
+			</tr>
+			<?php
+			if($i) $i=1; else $i=0;
+		}
+
+		foreach($this->cart->cartData['DATaxRulesBill'] as $rule){ ?>
+			<tr class="sectiontableentry<?php $i ?> DATaxRulesBill_tr">
+				<td colspan="3"><?php echo   $rule['calc_name'] ?> </td>
+                                     <?php if ( VmConfig::get('show_tax')) { ?>
+				<td>&nbsp;</td>
+
+                                <?php } ?>
+				<td><?php  echo $this->currencyDisplay->createPriceDiv($rule['virtuemart_calc_id'].'Diff','', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'].'Diff'],false);   ?>  </td>
+				<td><?php echo $this->currencyDisplay->createPriceDiv($rule['virtuemart_calc_id'].'Diff','', $this->cart->pricesUnformatted[$rule['virtuemart_calc_id'].'Diff'],false);   ?> </td>
+			</tr>
+			<?php
+			if($i) $i=1; else $i=0;
+		} ?>
+
+
+	<tr class="sectiontableentry1" id="shipment_tr">
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SELECTSHIPMENT');?>" colspan="4">
+				<?php // echo $this->cart->cartData['shipmentName']; ?>
+				<?php
+				echo JText::_('COM_VIRTUEMART_CART_SELECTSHIPMENT');
+				if(!empty($this->layoutName) && $this->layoutName=='default') {
+					echo "<fieldset id='shipments' class='radio-check'>";					
+						foreach($this->helper->shipments_shipment_rates as $rates) {
+								echo str_replace("input",'input onclick="update_form();"',$rates)."<br />";
+						}
+					echo "</fieldset>";
 				} else {
-					echo JText::_ ('COM_VIRTUEMART_CART_PAYMENT');
+				    JText::_('COM_VIRTUEMART_CART_SHIPPING');
 				}
-			} else {
-				echo $this->cart->cartData['paymentName'];
-			}?>
-			</div> <?php		
-			/*if (VmConfig::get ('show_tax')) {
-				echo $this->currencyDisplay->createPriceDiv ('paymentTax', '', $this->cart->pricesUnformatted['paymentTax'], FALSE);
-			}
-			if($this->cart->pricesUnformatted['salesPricePayment'] < 0) echo $this->currencyDisplay->createPriceDiv ('salesPricePayment', '', $this->cart->pricesUnformatted['salesPricePayment'], FALSE);
-				echo $this->currencyDisplay->createPriceDiv ('salesPricePayment', '', $this->cart->pricesUnformatted['salesPricePayment'], FALSE); */?>
-	</div>
-	<div class="totalPricePaymantShipment">
-		<div class="totalPriceNumber floatright"><?php echo $this->currencyDisplay->createPriceDiv ('billTotal', '', $this->cart->pricesUnformatted['billTotal'], FALSE); ?></div>
-		<div class="totalPriceName floatright"><?php echo JText::_ ('COM_VIRTUEMART_CART_TOTAL'); ?> к оплате:</div> <?php
-		/*if (VmConfig::get ('show_tax')) {
-			echo $this->currencyDisplay->createPriceDiv ('billTaxAmount', '', $this->cart->pricesUnformatted['billTaxAmount'], FALSE);
-		}
-		echo $this->currencyDisplay->createPriceDiv ('billDiscountAmount', '', $this->cart->pricesUnformatted['billDiscountAmount'], FALSE);*/ ?>
-		
-	</div><?php
+                if ( VmConfig::get('show_tax')) { ?>
+				</td>
+        <td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_TAX_AMOUNT') ?>"><?php echo "<span  class='priceColor2' id='shipment_tax'>".$this->currencyDisplay->createPriceDiv('shipmentTax','', $this->cart->pricesUnformatted['shipmentTax'],false)."</span>"; ?> </td>
+                <?php } ?>
+			<td>&nbsp;</td>
+				<td class="radio-check" id="shipment"><?php echo $this->currencyDisplay->createPriceDiv('salesPriceShipment','', $this->cart->pricesUnformatted['salesPriceShipment'],false); ?> </td>
+		</tr>
 
-	
-	if ($this->totalInPaymentCurrency) { ?>
+		<tr class="sectiontableentry1">
+			<td colspan="3">
+				<?php 
+				echo JText::_('COM_VIRTUEMART_CART_SELECTPAYMENT');
+				if(!empty($this->layoutName) && $this->layoutName=='default') { 
+					echo "<fieldset id='payments' class='radio-check'>";
+						foreach($this->helper->paymentplugins_payments as $payments) {
+							echo str_replace('type="radio"','type="radio" onclick="update_form();"',$payments)."<br />";
+						}
+					echo "</fieldset>";
+				} else {
+					JText::_('COM_VIRTUEMART_CART_PAYMENT'); 
+				}
+				?> </td>
+                <?php if ( VmConfig::get('show_tax')) { ?>
+				<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_TAX_AMOUNT') ?>"><?php echo "<span  class='priceColor2' id='payment_tax'>".$this->currencyDisplay->createPriceDiv('paymentTax','', $this->cart->pricesUnformatted['paymentTax'],false)."</span>"; ?> </td>
+                <?php } ?>
+				<td>&nbsp;</td>
+				<td class="radio-check" id="payment"><?php  echo $this->currencyDisplay->createPriceDiv('salesPricePayment','', $this->cart->pricesUnformatted['salesPricePayment'],false); ?> </td>
+			</tr>
+		  <tr class="sectiontableentry2">
+			<td colspan="3"><?php echo JText::_('COM_VIRTUEMART_CART_TOTAL') ?>: </td>
+                        <?php if ( VmConfig::get('show_tax')) { ?>
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_TAX_AMOUNT') ?>"> <?php echo "<span  class='priceColor2' id='total_tax'>".$this->currencyDisplay->createPriceDiv('billTaxAmount','', $this->cart->pricesUnformatted['billTaxAmount'],false)."</span>" ?> </td>
+                        <?php } ?>
+			<td data-title="<?php echo JText::_('COM_VIRTUEMART_CART_SUBTOTAL_DISCOUNT_AMOUNT') ?>"> <?php echo "<span  class='priceColor2' id='total_amount'>".$this->currencyDisplay->createPriceDiv('billDiscountAmount','', $this->cart->pricesUnformatted['billDiscountAmount'],false)."</span>" ?> </td>
+			<td><strong id="bill_total"><?php echo $this->currencyDisplay->createPriceDiv('billTotal','', $this->cart->pricesUnformatted['billTotal'],false) ?></strong></td>
+		  </tr>
+		    <?php
+		    if ( $this->totalInPaymentCurrency) {
+			?>
 
-	<tr class="sectiontableentry2 totalInPaymentCurrency">
-		<td colspan="4" align="right"><?php echo JText::_ ('COM_VIRTUEMART_CART_TOTAL_PAYMENT') ?>:</td>
-
-		<?php if (VmConfig::get ('show_tax')) { ?>
-		<td align="right"></td>
-		<?php } ?>
-		<td align="right"></td>
-		<td align="right"><strong><?php echo $this->totalInPaymentCurrency;   ?></strong></td>
-	</tr><?php
-	} ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
+		       <tr class="sectiontableentry2">
+					    <td colspan="4"><?php echo JText::_('COM_VIRTUEMART_CART_TOTAL_PAYMENT') ?>: </td>
+				    <?php if ( VmConfig::get('show_tax')) { ?>
+					    <td>&nbsp;</td>
+					    <?php } ?>
+					    <td>&nbsp;</td>
+					    <td><strong><?php echo $this->currencyDisplay->createPriceDiv('totalInPaymentCurrency','', $this->totalInPaymentCurrency,false); ?></strong></td>
+				      </tr>
+				      <?php
+		    }
+		    ?>
+      </tbody>
+	</table>
+</fieldset>
+<?php 
+if($this->params->get('address_position',0)==1) {
+	echo $this->loadTemplate('address'); 
+}
+?>
